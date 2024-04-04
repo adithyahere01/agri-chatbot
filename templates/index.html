@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.js"
+      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous"
+    ></script>
+
+    <style>
+      body {
+        font-family: monospace;
+      }
+      #chatbox {
+        margin-left: auto;
+        margin-right: auto;
+        width: 40%;
+        margin-top: 50px;
+      }
+      .botText {
+        font-family: monospace;
+        font-size: 16px;
+        text-align: left;
+        line-height: 25px;
+        color: blue;
+      }
+      #userInput {
+        margin-left: auto;
+        margin-right: auto;
+        width: 40%;
+        text-align: center;
+        margin-top: 50px;
+      }
+      #textInput {
+        border-bottom: 3px solid #657889;
+        font-family: monospace;
+        font-size: 16px;
+      }
+      #buttonInput {
+        padding: 5px;
+        font-family: monospace;
+        font-size: 16px;
+      }
+      h1 {
+        text-align: center;
+      }
+      .userText {
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>CHATBOT</h1>
+    <div>
+      <div id="chatbox">
+        <p class="botText"><span>Hi there!</span></p>
+        <p class="botText"><span>Which city you want the forecast?</span></p>
+      </div>
+
+      <div id="userInput">
+        <input
+          id="textInput"
+          type="text"
+          name="userMessage"
+          placeholder="Type you message"
+        />
+
+        <input type="submit" id="buttonInput" value="Send" />
+      </div>
+    </div>
+
+    <script>
+      cities = [
+        "Ariyalur",
+        "Chennai",
+        "Coimbatore",
+        "Cuddalore",
+        "Dharmapuri",
+        "Dindigul",
+        "Erode",
+        "Kanchipuram",
+        "Kanyakumari",
+        "Karur",
+        "Madurai",
+        "Nagapattinam",
+        "Nilgiris",
+        "Namakkal",
+        "Perambalur",
+        "Pudukkottai",
+        "Ramanathapuram",
+        "Salem",
+        "Sivaganga",
+        "Tirupur",
+        "Tiruchirappalli",
+        "Theni",
+        "Tirunelveli",
+        "Thanjavur",
+        "Thoothukudi",
+        "Tiruvallur",
+        "Tiruvarur",
+        "Tiruvannamalai",
+        "Vellore",
+        "Viluppuram",
+        "Virudhunagar",
+      ];
+
+      function getUserResponse() {
+        var userText = $("#textInput").val();
+        var userHTML =
+          "<p class='userText'> User: <span>" + userText + "</span></p>";
+        $("#textInput").val("");
+        $("#chatbox").append(userHTML);
+
+        document
+          .getElementById("userInput")
+          .scrollIntoView({ block: "start", behavior: "smooth" });
+        $.get("/get", { userMessage: userText }).done(function (data) {
+          let res = false;
+
+          console.log(data);
+
+          for (c of cities) {
+            if (c.toLowerCase() === userText.toLowerCase()) {
+              console.log("City", c);
+              res = true;
+              break;
+            }
+          }
+
+          let botHTML = "";
+          if (res == true) {
+            botHTML =
+              "<p class='botText' >Chatbot: <span>" +
+              data.weather[0].description +
+              " temperature: " +
+              data.main.temp;
+            ("</span></p>");
+          } else {
+            botHTML =
+              "<p class='botText' >Chatbot: <span>" + data + "</span></p>";
+          }
+
+          $("#chatbox").append(botHTML);
+        });
+      }
+
+      $("#textInput").keypress(function (e) {
+        if (e.which == 13) {
+          getUserResponse();
+        }
+      });
+
+      $("#buttonInput").click(function (e) {
+        getUserResponse();
+      });
+    </script>
+  </body>
+</html>
