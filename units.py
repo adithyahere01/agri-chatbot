@@ -1,5 +1,4 @@
 from chatterbot import ChatBot
-# from chatterbot.trainers import ListTrainer
 
 bot = ChatBot("units", logic_adapters=["chatterbot.logic.UnitConversion"])
 

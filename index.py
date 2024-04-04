@@ -112,8 +112,8 @@ list_trainer = ListTrainer(bot)
 list_trainer.train(list_to_train)
 
 trainer = ChatterBotCorpusTrainer(bot)
-# trainer.train("chatterbot.corpus.english")
-# trainer.train("chatterbot.corpus.spanish")
+trainer.train("chatterbot.corpus.english")
+trainer.train("chatterbot.corpus.spanish")
 
 @app.route("/")
 def main():
@@ -129,7 +129,6 @@ def get_chatbot_response():
         print(result)
         return result
     return str(bot.get_response(userText))
-    # return result
 
 
 if __name__ == "__main__":
